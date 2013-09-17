@@ -198,6 +198,8 @@ function redraw() {
    
    // Simple version: just draw the initial "midground" smiley
    // NB: This doesn't handle background/foreground yet.
+
+	//
    
    g_smiley.draw();
 }
