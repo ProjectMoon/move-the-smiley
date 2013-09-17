@@ -66,8 +66,8 @@
 //
 // Regrettable, but they just make things easier.
 //
-var g_canvas = document.getElementById("myCanvas");
-var g_ctx = g_canvas.getContext("2d");
+var g_canvas;// = document.getElementById("myCanvas");
+var g_ctx;// = g_canvas.getContext("2d");
 
 
 // ================
@@ -258,4 +258,8 @@ function redraw() {
 // ========================================
 
 // For now, I'm just going to do this, to kick things off...
-redraw();
+window.onload = function() {
+	g_canvas = document.getElementById("myCanvas");
+	g_ctx = g_canvas.getContext("2d");
+	redraw();
+};
