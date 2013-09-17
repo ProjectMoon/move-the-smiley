@@ -6,7 +6,7 @@
 
 /*
  Stay within this 72 character margin, to keep your code easily readable
- 1         2         3         4         5         6         7
+ 1			  2			3			 4			  5			6			 7
  123456789012345678901234567890123456789012345678901234567890123456789012
  */
 
@@ -17,12 +17,12 @@
 // * As ever, Fork Off this Fiddle BEFORE making any changes.
 //
 // * Submit your URL with an explicit numerical version suffix
-//   (e.g. "jsfiddle.net/qWeRtY/0" denoting version 0)
-//   NB: If you do not provide a suffix, the marker is allowed
-//   to assume anything. In particular, they may assume 0.
+//	  (e.g. "jsfiddle.net/qWeRtY/0" denoting version 0)
+//	  NB: If you do not provide a suffix, the marker is allowed
+//	  to assume anything. In particular, they may assume 0.
 //
 // * Don't modify this framework except where instructed.
-//   It is here to help you (and to help us when marking!)
+//	  It is here to help you (and to help us when marking!)
 //
 // * DON'T CHEAT!
 
@@ -35,14 +35,14 @@
 // * WASD keys should move it up/left/down/right by 10 pixels-per-event
 // * OP keys should divide/multiply its radius by a factor of 1.1
 // * QE keys should reduce/increase its orientation by 1/37th of a
-//      revolution.
+//		  revolution.
 // * T should toggle a "trail" behind the moveable one.
-//   HINT: Doing this is actually easier than NOT doing it!
+//	  HINT: Doing this is actually easier than NOT doing it!
 //
 // * B should toggle a background of 2 other smileys
 // * F should toggle a foreground of 2 other smileys
 // * One of the foreground smileys should rotate in the opposite
-//   direction to the player-moveable one.
+//	  direction to the player-moveable one.
 //
 // * M should toggle support for moving the smiley via the mouse
 //
@@ -52,12 +52,12 @@
 // * The mouse-control should be off by default
 //
 // NB: The trail *doesn't* have to be preserved across F and B toggles
-//     Typically, either of these toggles will have the side-effect of
-//     erasing the current trail.
+//		 Typically, either of these toggles will have the side-effect of
+//		 erasing the current trail.
 //
-//     The drawBackground and drawForeground functions have been
-//     provided for you, but you'll have to modify the foreground one
-//     to implement the counter-rotation feature.
+//		 The drawBackground and drawForeground functions have been
+//		 provided for you, but you'll have to modify the foreground one
+//		 to implement the counter-rotation feature.
 
 
 // ============
@@ -75,52 +75,48 @@ var g_ctx;// = g_canvas.getContext("2d");
 // ================
 
 function clear() {
-   g_ctx.clearRect(0, 0, g_canvas.width, g_canvas.height);
+	g_ctx.clearRect(0, 0, g_canvas.width, g_canvas.height);
 }
 
 function drawBackground() {
-   drawDefaultSmiley(g_ctx);
-   drawSmileyAt(g_ctx,  25, 375,  25, -Math.PI/8);
+	drawDefaultSmiley(g_ctx);
+	drawSmileyAt(g_ctx,	25, 375,	 25, -Math.PI/8);
 }
 
 function drawForeground() {
-   drawSmileyAt(g_ctx,  25, 375,  25, Math.PI/8);
-   
-   // TODO: Make this one rotate in the opposite direction
-   //       to your player-controllable one.
-   drawSmileyAt(g_ctx, 300, 300, 100, Math.PI/8);
+	drawSmileyAt(g_ctx,	25, 375,	 25, Math.PI/8);
+	
+	// TODO: Make this one rotate in the opposite direction
+	//			to your player-controllable one.
+	drawSmileyAt(g_ctx, 300, 300, 100, Math.PI/8);
 }
 
 function fillEllipse(ctx, cx, cy, halfWidth, halfHeight, angle) {
-   ctx.save(); // save the current ctx state, to restore later
-   ctx.beginPath();
-   
-   // These "matrix ops" are applied in last-to-first order
-   // ..which can seem a bit weird, but actually makes sense
-   //
-   // After modifying the ctx state like this, it's important
-   // to restore it
-   ctx.translate(cx, cy);
-   ctx.rotate(angle);
-   ctx.scale(halfWidth, halfHeight);
-   
-   // Just draw a unit circle, and let the matrices do the rest!
-   ctx.arc(0, 0, 1, 0, Math.PI*2);
-   ctx.fill();
-   
-   ctx.restore();
+	ctx.save(); // save the current ctx state, to restore later
+	ctx.beginPath();
+	
+	// These "matrix ops" are applied in last-to-first order
+	// ..which can seem a bit weird, but actually makes sense
+	//
+	// After modifying the ctx state like this, it's important
+	// to restore it
+	ctx.translate(cx, cy);
+	ctx.rotate(angle);
+	ctx.scale(halfWidth, halfHeight);
+	
+	// Just draw a unit circle, and let the matrices do the rest!
+	ctx.arc(0, 0, 1, 0, Math.PI*2);
+	ctx.fill();
+	
+	ctx.restore();
 }
-
 
 // =================
 // MATRIX CLEVERNESS
 // =================
 
 function drawSmileyAt(ctx, cx, cy, radius, angle) {
-   // This matrix trickery lets me take a "default smiley",
-   // and transform it so I can draw it anyway, at any size,
-   // and at any angle.
-   //
+	//matrix trickery moved off-site to cut down on expenses
 	em_drawSmiley(ctx, cx, cy, radius, angle);
 }
 
@@ -133,11 +129,18 @@ function drawSmileyAt(ctx, cx, cy, radius, angle) {
 // little javascript object. (Global for "convenience").
 //
 var g_smiley = {
-   x : 350,
-   y :  50,
-   
-   radius : 50,
-   angle  : 0
+	x : 350,
+	y :  50,
+	mouseMovement: false,
+	radius : 50,
+	angle	 : 0
+};
+
+// other flags (and their default values)
+var g_flags = {
+	backgroundSmilies: true,
+	foregroundSmilies: true,
+	trail: false
 };
 
 // Let's add a draw method...
@@ -146,9 +149,9 @@ var g_smiley = {
 // cleaner to add the functions separately, to reduce indentation.)
 //
 g_smiley.draw = function() {
-   drawSmileyAt(g_ctx, 
-                this.x, this.y, 
-                this.radius, this.angle);
+	drawSmileyAt(g_ctx, 
+					 this.x, this.y, 
+					 this.radius, this.angle);
 };
 
 // You *might* want to add other methods here, as part of your
@@ -166,8 +169,8 @@ g_smiley.draw = function() {
 // ======================
 
 var g_defaultSmileyX = 200,
-    g_defaultSmileyY = 200,
-    g_defaultSmileyRadius = 150;
+	 g_defaultSmileyY = 200,
+	 g_defaultSmileyRadius = 150;
 
 // =====================================================
 // YOUR VERSION OF drawDefaultSmiley(ctx) SHOULD GO HERE
@@ -195,13 +198,23 @@ var g_defaultSmileyX = 200,
 // dealing with the "trail" etc).
 //
 function redraw() {
-   
-   // Simple version: just draw the initial "midground" smiley
-   // NB: This doesn't handle background/foreground yet.
+	//clear (unless trails)
+	if (!g_flags.trail) {
+		clear();
+	}
+	
+	//draw background smileys
+	if (g_flags.background) {
+		drawBackground();
+	}
 
-	//
-   
-   g_smiley.draw();
+	//draw midground smiley
+	g_smiley.draw();
+	
+	//draw foreground smileys
+	if (g_flags.foreground) {
+		drawForeground();
+	}
 }
 
 
@@ -209,9 +222,38 @@ function redraw() {
 // YOUR EVENT-HANDLING STUFF SHOULD GO HERE
 // ========================================
 
+//mouse events:
+// if mouse movement toggled, set smiley x,y to whatever the mouse
+// coords are.
+
+// keyboard events:
+// - WASD: change smiley x,y by 10 in proper direction
+// - QP: change smiley radius by 1.1 in proper direction
+// - QP: change smiley angle by 1/37th in proper direction
+// - T: toggle trail true/false
+// - B: toggle background smileys true/false
+// - F: toggle foregroud smileys true/false
+//
+
+function bindEvents(canvas) {
+	canvas.addEventListener('keyup', function(evt) {
+		alert(String.fromCharCode(evt.which));
+	});
+
+	/*
+	canvas.addEventListener('blur', function(evt) {
+		alert('Canvas lost focus and won\'t respond to events until ' +
+				'it regains focus. Unless you switched windows, then ' +
+				'it\'s fine.');
+	});
+	 */
+}
+
 // For now, I'm just going to do this, to kick things off...
 window.onload = function() {
 	g_canvas = document.getElementById("myCanvas");
 	g_ctx = g_canvas.getContext("2d");
+	bindEvents(g_canvas);
+	g_canvas.focus();
 	redraw();
 };

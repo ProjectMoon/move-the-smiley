@@ -7,9 +7,11 @@
 ** TODO QE keys should reduce/increase angle by 1/37th of a revolution.
 ** TODO T should toggle a "trail" (aka stop clearing)
 ** TODO B should toggle a background of 2 other smileys 
+Note: call clear() here when toggling this.
 ** TODO F should toggle a foreground of 2 other smileys
-One of the foreground smileys should rotate in the opposite direction
-to the player-moveable one.
+*** TODO One of the foreground smileys should rotate
+It should rotate in the opposite direction to the player-moveable
+one. Note: call clear() when toggling this.
 ** TODO M should toggle support for moving the smiley via the mouse
 ** TODO The background should be on by default
 ** TODO The foreground should be on by default
@@ -23,8 +25,16 @@ The drawBackground and drawForeground functions have been provided for
 you, but you'll have to modify the foreground one to implement the
 counter-rotation feature.
 
+* Design
+** TODO Put all key events into a assoc. array
+** TODO Key event simply consults e.which
+Use String.fromCharCode to get the character pressed.
+
 * Personal todos (after moving to jsfiddle)
 ** TODO Embed smiley "library" from GitHub as external resource.
+** TODO Add tabindex="1" to the canvas declaration
 ** TODO Remove the onload function.
+*** TODO Move event binding out of the function.
 *** TODO Put the g_canvas and g_ctx assignments back.
 ** TODO Possibly reset the drawDefaultSmiley function?
+** TODO Switch from tabs to spaces?
