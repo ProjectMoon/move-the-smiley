@@ -121,14 +121,7 @@ function drawSmileyAt(ctx, cx, cy, radius, angle) {
    // and transform it so I can draw it anyway, at any size,
    // and at any angle.
    //
-   ctx.save();
-   ctx.translate(cx, cy);
-   ctx.rotate(angle);
-   var scale = radius / g_defaultSmileyRadius;
-   ctx.scale(scale, scale);
-   ctx.translate(-g_defaultSmileyX, -g_defaultSmileyY);
-   drawDefaultSmiley(ctx);
-   ctx.restore();
+	em_drawSmiley(ctx, cx, cy, radius, angle);
 }
 
 
@@ -175,49 +168,6 @@ g_smiley.draw = function() {
 var g_defaultSmileyX = 200,
     g_defaultSmileyY = 200,
     g_defaultSmileyRadius = 150;
-
-// A crappy placeholder smiley implementation.
-function drawDefaultSmiley(ctx) {
-   ctx.save();
-
-   // abbreviation variables
-   var cx = g_defaultSmileyX,
-       cy = g_defaultSmileyY,
-       r  = g_defaultSmileyRadius;
-   
-   // face
-   ctx.fillStyle = "yellow";
-   fillEllipse(ctx, cx, cy, r, r, 0);
-   
-   // border
-   strokeArc(ctx, cx, cy, r, 0, Math.PI * 2, "black");
-   
-   // weird HAL-like cyclopse eye!
-   ctx.fillStyle = "black";
-   fillEllipse(ctx, cx, cy - r/3, r/3, r/3, 0);
-   ctx.fillStyle = "red";
-   fillEllipse(ctx, cx, cy - r/3, r/4, r/4, 0);
-   
-   // mouth
-   var smileAngle = Math.PI * 0.7,
-       smileAngleOffset = (Math.PI - smileAngle) /2,
-       smileAngleStart = smileAngleOffset,
-       smileAngleEnd = Math.PI - smileAngleOffset,
-       smileRadius = r * 2/3;
-   ctx.lineWidth = r / 20;
-   strokeArc(ctx, cx, cy, smileRadius,
-             smileAngleStart, smileAngleEnd, "black");
-   
-   ctx.restore();
-}
-
-function strokeArc(ctx, x, y, radius, startAngle, endAngle)
-{
-   ctx.beginPath();
-   ctx.arc(x, y, radius, startAngle, endAngle);
-   ctx.stroke();
-}
-
 
 // =====================================================
 // YOUR VERSION OF drawDefaultSmiley(ctx) SHOULD GO HERE
