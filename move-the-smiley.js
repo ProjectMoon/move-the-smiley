@@ -73,6 +73,9 @@ var g_ctx;// = g_canvas.getContext("2d");
 // ================
 // HELPER FUNCTIONS
 // ================
+function debug(text) {
+	document.getElementById('info').innerText = text;
+}
 
 function clear() {
 	g_ctx.clearRect(0, 0, g_canvas.width, g_canvas.height);
@@ -88,7 +91,7 @@ function drawForeground() {
 	
 	// TODO: Make this one rotate in the opposite direction
 	//			to your player-controllable one.
-	drawSmileyAt(g_ctx, 300, 300, 100, Math.PI/8);
+	drawSmileyAt(g_ctx, 300, 300, 100, -g_smiley.angle);
 }
 
 function fillEllipse(ctx, cx, cy, halfWidth, halfHeight, angle) {
@@ -116,6 +119,7 @@ function fillEllipse(ctx, cx, cy, halfWidth, halfHeight, angle) {
 // =================
 
 function drawSmileyAt(ctx, cx, cy, radius, angle) {
+	debug(g_smiley.angle);
 	//matrix trickery moved off-site to cut down on expenses
 	em_drawSmiley(ctx, cx, cy, radius, angle);
 }
@@ -181,11 +185,11 @@ var g_defaultSmileyX = 200,
 // If you didn't complete the previous homework, then just
 // use my crappy placeholder.
 //
-/*
- function drawDefaultSmiley(ctx) {
- // YOUR CODE
- }
- */
+function drawDefaultSmiley(ctx) {
+	em_drawSmiley(ctx, g_defaultSmileyX, g_defaultSmileyY,
+					  g_defaultSmileyRadius);
+}
+
 
 
 // ======
@@ -198,13 +202,19 @@ var g_defaultSmileyX = 200,
 // dealing with the "trail" etc).
 //
 function redraw() {
+	//handle some keyboard events.
+	if (keysPressed.A) g_smiley.x -= 10;
+	if (keysPressed.D) g_smiley.x += 10;
+	if (keysPressed.W) g_smiley.y -= 10;
+	if (keysPressed.S) g_smiley.y += 10;
+	
 	//clear (unless trails)
 	if (!g_flags.trail) {
 		clear();
 	}
 	
 	//draw background smileys
-	if (g_flags.background) {
+	if (g_flags.backgroundSmilies) {
 		drawBackground();
 	}
 
@@ -212,7 +222,7 @@ function redraw() {
 	g_smiley.draw();
 	
 	//draw foreground smileys
-	if (g_flags.foreground) {
+	if (g_flags.foregroundSmilies) {
 		drawForeground();
 	}
 }
@@ -235,11 +245,108 @@ function redraw() {
 // - F: toggle foregroud smileys true/false
 //
 
+var keysPressed = {
+	W: false,
+	A: false,
+	S: false,
+	D: false
+};
+
+var keyDownEvents = {};
+var keyUpEvents = {};
+
+//move the smiley
+keyDownEvents['W'] = function(evt) {
+	keysPressed.W = true;
+};
+
+keyDownEvents['S'] = function(evt) {
+	keysPressed.S = true;
+};
+
+keyDownEvents['A'] = function(evt) {
+	keysPressed.A = true;
+};
+
+keyDownEvents['D'] = function(evt) {
+	keysPressed.D = true;
+};
+
+//key up events
+keyUpEvents['W'] = function(evt) {
+	keysPressed.W = false;
+};
+
+keyUpEvents['S'] = function(evt) {
+	keysPressed.S = false;
+};
+
+keyUpEvents['A'] = function(evt) {
+	keysPressed.A = false;
+};
+
+keyUpEvents['D'] = function(evt) {
+	keysPressed.D = false;
+};
+
+//change smiley radius
+keyDownEvents['O'] = function(evt) {
+	g_smiley.radius -= 1.1;
+};
+
+keyDownEvents['P'] = function(evt) {
+	g_smiley.radius += 1.1;
+};
+
+//change smiley angle
+keyDownEvents['Q'] = function(evt) {
+	g_smiley.angle -= Math.PI / 37;
+};
+
+keyDownEvents['E'] = function(evt) {
+	g_smiley.angle += Math.PI / 37;
+};
+
+//toggles
+keyDownEvents['T'] = function(evt) {
+	g_flags.trail = !g_flags.trail;
+};
+
+keyDownEvents['B'] = function(evt) {
+	g_flags.backgroundSmilies = !g_flags.backgroundSmilies;
+};
+
+keyDownEvents['F'] = function(evt) {
+	g_flags.foregroundSmilies = !g_flags.foregroundSmilies;
+};
+
+keyDownEvents['M'] = function(evt) {
+	g_flags.mouseMovement = !g_flags.mouseMovement;
+};
+
 function bindEvents(canvas) {
-	canvas.addEventListener('keyup', function(evt) {
-		alert(String.fromCharCode(evt.which));
+	canvas.addEventListener('keydown', function(evt) {
+		var key = String.fromCharCode(evt.which);
+
+		if (key in keyDownEvents) {
+			keyDownEvents[key](evt);
+		}
 	});
 
+	canvas.addEventListener('keyup', function(evt) {
+		var key = String.fromCharCode(evt.which);
+
+		if (key in keyUpEvents) {
+			keyUpEvents[key](evt);
+		}
+	});
+
+	canvas.addEventListener('mousemove', function(evt) {
+		if (g_flags.mouseMovement) {
+			g_smiley.x = evt.clientX;
+			g_smiley.y = evt.clientY;
+		}
+	});
 	/*
 	canvas.addEventListener('blur', function(evt) {
 		alert('Canvas lost focus and won\'t respond to events until ' +
@@ -255,5 +362,8 @@ window.onload = function() {
 	g_ctx = g_canvas.getContext("2d");
 	bindEvents(g_canvas);
 	g_canvas.focus();
-	redraw();
+
+	setInterval(function() {
+		redraw();
+	}, 30);
 };

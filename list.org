@@ -1,22 +1,22 @@
 #+STARTUP: indent
 
 * Smiley objectives
-** TODO Draw a midground smiley at coord x=350, y=50 with radius=50
-** TODO WASD should move it around by 10 pixels per event
-** TODO QP keys should divide/multiply its radius by 1.1
-** TODO QE keys should reduce/increase angle by 1/37th of a revolution.
-** TODO T should toggle a "trail" (aka stop clearing)
-** TODO B should toggle a background of 2 other smileys 
+** DONE Draw a midground smiley at coord x=350, y=50 with radius=50
+** DONE WASD should move it around by 10 pixels per event
+** DONE OP keys should divide/multiply its radius by 1.1
+** DONE QE keys should reduce/increase angle by 1/37th of a revolution.
+** DONE T should toggle a "trail" (aka stop clearing)
+** DONE B should toggle a background of 2 other smileys 
 Note: call clear() here when toggling this.
-** TODO F should toggle a foreground of 2 other smileys
-*** TODO One of the foreground smileys should rotate
+** DONE F should toggle a foreground of 2 other smileys
+*** DONE One of the foreground smileys should rotate
 It should rotate in the opposite direction to the player-moveable
 one. Note: call clear() when toggling this.
-** TODO M should toggle support for moving the smiley via the mouse
-** TODO The background should be on by default
-** TODO The foreground should be on by default
-** TODO The trail should be off by default.
-** TODO The mouse-control should be off by default
+** DONE M should toggle support for moving the smiley via the mouse
+** DONE The background should be on by default
+** DONE The foreground should be on by default
+** DONE The trail should be off by default.
+** DONE The mouse-control should be off by default
 The trail *doesn't* have to be preserved across F and B
 toggles. Typically, either of these toggles will have the side-effect
 of erasing the current trail.
@@ -26,8 +26,8 @@ you, but you'll have to modify the foreground one to implement the
 counter-rotation feature.
 
 * Design
-** TODO Put all key events into a assoc. array
-** TODO Key event simply consults e.which
+** DONE Put all key events into a assoc. array
+** DONE Key event simply consults e.which
 Use String.fromCharCode to get the character pressed.
 
 * Personal todos (after moving to jsfiddle)
